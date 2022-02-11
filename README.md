@@ -116,3 +116,22 @@ const mapDispatchToProps = dispatch => ({ add: text => dispatch(addTodo(text)) }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
 ```
+
+## 여기부터는 Redux Toolkit을 사용한 코드
+
+```js
+// store/index.js
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+
+const todo = createSlice({
+  name: 'todosReducer',
+  initialState: [],
+  reducers: {
+    addTodo: (state, action) => [{ text: action.payload, id: Date.now() }, ...state],
+    deleteTodo: (state, action) => state.filter(todo => todo.id !== action.payload),
+  }
+});
+
+export const { addTodo, deleteTodo } = todo.actions;
+export default configureStore({ reducer: todo.reducer });
+```
