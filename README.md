@@ -55,3 +55,64 @@ const handleMinusBtn = () => store.dispatch({ type: MINUS });
 document.getElementById("minusBtn").addEventListener("click", handleMinusBtn);
 ```
 
+## 여기부터는 React + Redux
+
+### 소스 코드
+
+```js
+// store/index.js
+import { createStore } from "redux";
+const status = { ADD: 1, DELETE: 9 };
+export const addTodo = text => ({ type: status.ADD, id: Date.now(), text });
+export const deleteTodo = id => ({ type: status.DELETE, id });
+const reducer = (state = [], action) => {
+  switch (action.type) {
+    case status.ADD:
+      const todo = { text: action.text, id: action.id };
+      return [todo, ...state];
+    case status.DELETE:
+      return state.filter(todo => todo.id !== action.id);
+    default:
+      return state;
+  }
+}
+const store = createStore(reducer);
+export default store;
+
+
+// Home.js
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import Todo from "../components/Todo";
+import { addTodo, deleteTodo } from "../store";
+
+const Home = ({ todos, add }) => {
+  const [text, setText] = useState("");
+  const textOnChange = (e) => setText(e.target.value);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    add(text);
+    setText("");
+  };
+
+  return (
+    <>
+      <h1>Todo</h1>
+      <form onSubmit={onSubmit}>
+        <input type="text" value={text} onChange={textOnChange} />
+        <button type="submit">Register</button>
+      </form>
+      <ul>
+        {todos.map(todo =>
+          <Todo key={todo.id} {...todo} />
+        )}
+      </ul>
+    </>
+  );
+};
+
+const mapStateToProps = state => ({ todos: state });
+const mapDispatchToProps = dispatch => ({ add: text => dispatch(addTodo(text)) });
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
+```

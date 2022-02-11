@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import Todo from "../components/Todo";
-import { addTodo, deleteTodo } from "../store";
+import { addTodo } from "../store";
 
-const Home = ({ todos, add, remove }) => {
+const Home = ({ todos, add }) => {
   const [text, setText] = useState("");
   const textOnChange = (e) => setText(e.target.value);
   const onSubmit = (e) => {
@@ -28,16 +28,8 @@ const Home = ({ todos, add, remove }) => {
   );
 }
 
-const mapStateToProps = state => {
-  return { todos: state };
-};
-const mapDispatchToProps = (dispatch) => {
-
-  return {
-    add: text => dispatch(addTodo(text)),
-    remove: id => dispatch(deleteTodo(id)),
-  };
-};
+const mapStateToProps = state => ({ todos: state });
+const mapDispatchToProps = dispatch => ({ add: text => dispatch(addTodo(text)) });
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

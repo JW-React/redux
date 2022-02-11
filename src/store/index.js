@@ -21,8 +21,5 @@ const reducer = (state = [], action) => {
 };
 
 const store = createStore(reducer);
-export const addTodoToStore = (text) => store.dispatch(addTodo);
-export const deleteTodoFromStore = (id) => store.dispatch(deleteTodo);
-
 
 export default store;
